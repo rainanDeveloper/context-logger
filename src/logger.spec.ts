@@ -3,9 +3,10 @@ import { Logger } from "./logger";
 import {equal} from "node:assert";
 
 describe('Logger', () => {
-    it('Should create a new Logger instance', () => {
-        const logger = new Logger();
-
-        equal((logger instanceof Logger), true);
+    const unitTestContextMock = 'Logger Unit Test';
+    let loggerInstance: Logger = new Logger(unitTestContextMock);
+    it('Logger instance should be defined and a instance of Logger', () => {
+        equal(!loggerInstance, false);
+        equal((loggerInstance instanceof Logger), true);
     });
 })

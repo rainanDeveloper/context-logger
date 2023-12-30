@@ -5,7 +5,7 @@ export type LogLevel = 'log' | 'error' | 'warn' | 'debug' | 'verbose' | 'fatal';
 export class Logger {
     constructor(private readonly context?: string) {}
 
-    private getColorByLogLevel(logLevel: LogLevel) {
+    public getColorByLogLevel(logLevel: LogLevel) {
         switch (logLevel) {
             case 'debug':
               return cliColors.magentaBright;
@@ -23,24 +23,24 @@ export class Logger {
       
     }
 
-    private colorize(message: string, logLevel: LogLevel) {
+    public colorize(message: string, logLevel: LogLevel) {
         const color = this.getColorByLogLevel(logLevel);
         return color(message);
     }
 
-    private formatPID(pid: number, logLevel: LogLevel) {
+    public formatPID(pid: number, logLevel: LogLevel) {
         return this.colorize(`pid: [${pid}]`, logLevel);
     }
 
-    private formatContext() {
+    public formatContext() {
         return cliColors.yellow(`[${this.context}]`)
     }
 
-    private formatLogLevel(logLevel: LogLevel) {
+    public formatLogLevel(logLevel: LogLevel) {
         return this.colorize(`[${logLevel.toUpperCase()}]`, logLevel);
     }
 
-    private formatMessage(message: string, logLevel: LogLevel) {
+    public formatMessage(message: string, logLevel: LogLevel) {
         const PIDMessage = this.formatPID(process.pid, logLevel);
         const timestamp = this.getCurrentTimestampFormatted();
         const formattedLogLevel = this.formatLogLevel(logLevel);
@@ -50,7 +50,7 @@ export class Logger {
         return `${PIDMessage} - ${timestamp} ${formattedLogLevel} ${contextMessage}${message}\n`;
     }
 
-    private getCurrentTimestampFormatted() {
+    public getCurrentTimestampFormatted() {
         return new Date().toLocaleString(process.env.LOCALE || 'en-US');
     }
 
