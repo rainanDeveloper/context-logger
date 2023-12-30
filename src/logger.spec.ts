@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import { LogLevel, Logger } from "./logger";
-import {equal} from "node:assert";
+import { equal } from "node:assert";
 import { cliColors } from "./utils/cli-colors";
 
 describe('Logger', () => {
