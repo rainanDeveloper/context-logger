@@ -28,32 +28,34 @@ export class Logger {
         return color(message);
     }
 
-    private formatPID(pid: number) {
-        return `${pid}\t - `;
+    private formatPID(pid: number, logLevel: LogLevel) {
+        return this.colorize(`pid: [${pid}]`, logLevel);
     }
 
     private formatContext() {
         return cliColors.yellow(`[${this.context}]`)
     }
 
-    private formatMessage(logLevel: LogLevel, message: string, PIDMessage: string, formattedLogLevel: string, contextMessage: string, timestamp: string) {
+    private formatLogLevel(logLevel: LogLevel) {
+        return this.colorize(`[${logLevel.toUpperCase()}]`, logLevel);
+    }
+
+    private formatMessage(message: string, logLevel: LogLevel) {
+        const PIDMessage = this.formatPID(process.pid, logLevel);
+        const timestamp = this.getCurrentTimestampFormatted();
+        const formattedLogLevel = this.formatLogLevel(logLevel);
         message = this.colorize(message, logLevel);
         message = ` ${message}`;
-        PIDMessage = this.colorize(PIDMessage, logLevel);
-        formattedLogLevel = this.colorize(formattedLogLevel, logLevel);
-        return `${PIDMessage}${timestamp} ${formattedLogLevel} ${contextMessage}${message}\n`;
+        const contextMessage = this.formatContext();
+        return `${PIDMessage} - ${timestamp} ${formattedLogLevel} ${contextMessage}${message}\n`;
     }
 
     private getCurrentTimestampFormatted() {
-        return new Date().toLocaleString(process.env.LOCALE || 'us');
+        return new Date().toLocaleString(process.env.LOCALE || 'en-US');
     }
 
     private printMessage(message: string, logLevel: LogLevel) {
-        const PIDMessage = this.formatPID(process.pid);
-        const contextMessage = this.formatContext();
-        const timestamp = this.getCurrentTimestampFormatted();
-        const formattedLogLevel = logLevel.toUpperCase();
-        const finalMessage = this.formatMessage(logLevel, message, PIDMessage, formattedLogLevel, contextMessage, timestamp);
+        const finalMessage = this.formatMessage(message, logLevel);
 
         process.stdout.write(finalMessage);
     }
