@@ -1,6 +1,6 @@
-import { describe, it } from "node:test";
-import { LogLevel, Logger } from "./logger";
-import { equal } from "node:assert";
+import { describe, it, mock } from "node:test";
+import { Logger } from "./logger";
+import { equal, strictEqual } from "node:assert";
 import { cliColors } from "./utils/cli-colors";
 
 describe('Logger', () => {
@@ -11,45 +11,15 @@ describe('Logger', () => {
         equal((loggerInstance instanceof Logger), true);
     });
 
-    describe('getColorByLogLevel', () => {
-        it('should get the color magentaBright since the log level is \'debug\'', async () => {
-            const logLevelMock: LogLevel = 'debug';
-
-            const result = loggerInstance.getColorByLogLevel(logLevelMock);
-
-            equal(result, cliColors.magentaBright);
+    describe('log', () => {
+        it('It should print a log to the default output (process.stdout)', async () => {
+            const messageMock = 'Some test message';
+            process.stdout.write = mock.fn(()=>true, {times: 1});
+    
+            loggerInstance.log(messageMock);
+    
+            strictEqual(process.stdout.write['mock'].callCount(), 1);
+            strictEqual(process.stdout.write['mock'].calls[0].arguments.length, 1);
         });
-
-        it('should get the color yellow since the log level is \'warn\'', async () => {
-            const logLevelMock: LogLevel = 'warn';
-
-            const result = loggerInstance.getColorByLogLevel(logLevelMock);
-
-            equal(result, cliColors.yellow);
-        });
-
-        it('should get the color red since the log level is \'error\'', async () => {
-            const logLevelMock: LogLevel = 'error';
-
-            const result = loggerInstance.getColorByLogLevel(logLevelMock);
-
-            equal(result, cliColors.red);
-        });
-
-        it('should get the color cyanBright since the log level is \'verbose\'', async () => {
-            const logLevelMock: LogLevel = 'verbose';
-
-            const result = loggerInstance.getColorByLogLevel(logLevelMock);
-
-            equal(result, cliColors.cyanBright);
-        });
-
-        it('should get the color bold since the log level is \'fatal\'', async () => {
-            const logLevelMock: LogLevel = 'fatal';
-
-            const result = loggerInstance.getColorByLogLevel(logLevelMock);
-
-            equal(result, cliColors.bold);
-        });
-    });
+    })
 })

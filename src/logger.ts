@@ -5,7 +5,7 @@ export type LogLevel = 'log' | 'error' | 'warn' | 'debug' | 'verbose' | 'fatal';
 export class Logger {
     constructor(private readonly context?: string) {}
 
-    public getColorByLogLevel(logLevel: LogLevel) {
+    private getColorByLogLevel(logLevel: LogLevel) {
         switch (logLevel) {
             case 'debug':
               return cliColors.magentaBright;
@@ -23,34 +23,34 @@ export class Logger {
       
     }
 
-    public colorize(message: string, logLevel: LogLevel) {
+    private colorize(message: string, logLevel: LogLevel) {
         const color = this.getColorByLogLevel(logLevel);
         return color(message);
     }
 
-    public formatPID(pid: number, logLevel: LogLevel) {
+    private formatPID(pid: number, logLevel: LogLevel) {
         return this.colorize(`pid: [${pid}]`, logLevel);
     }
 
-    public formatContext() {
+    private formatContext() {
         return cliColors.yellow(`[${this.context}]`)
     }
 
-    public formatLogLevel(logLevel: LogLevel) {
+    private formatLogLevel(logLevel: LogLevel) {
         return this.colorize(`[${logLevel.toUpperCase()}]`, logLevel);
     }
 
-    public formatMessage(message: string, logLevel: LogLevel) {
+    private formatMessage(message: string, logLevel: LogLevel) {
         const PIDMessage = this.formatPID(process.pid, logLevel);
         const timestamp = this.getCurrentTimestampFormatted();
         const formattedLogLevel = this.formatLogLevel(logLevel);
+        const contextMessage = this.formatContext();
         message = this.colorize(message, logLevel);
         message = ` ${message}`;
-        const contextMessage = this.formatContext();
-        return `${PIDMessage} - ${timestamp} ${formattedLogLevel} ${contextMessage}${message}\n`;
+        return `${PIDMessage} - ${timestamp} ${formattedLogLevel} ${contextMessage} ${message}\n`;
     }
 
-    public getCurrentTimestampFormatted() {
+    private getCurrentTimestampFormatted() {
         return new Date().toLocaleString(process.env.LOCALE || 'en-US');
     }
 
