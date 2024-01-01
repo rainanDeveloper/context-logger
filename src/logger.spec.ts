@@ -53,7 +53,7 @@ describe('Logger', () => {
     });
 
     describe('error', () => {
-        it('should log an error to the stdout the message, building correctly a log', async () => {
+        it('should log an error to the stderr, building correctly a log', async () => {
             const PIDMessageMock = cliColors.red(`pid: [${process.pid}]`);
             const timestampMock = (new Date()).toLocaleString();
             const formattedLogLevelMock = cliColors.red(`[ERROR]`);
@@ -89,7 +89,7 @@ describe('Logger', () => {
     });
 
     describe('debug', () => {
-        it('should log an debug log to the stdout the message, building correctly a log', async () => {
+        it('should log an debug log to the stdout, building correctly a log', async () => {
             const PIDMessageMock = cliColors.magentaBright(`pid: [${process.pid}]`);
             const timestampMock = (new Date()).toLocaleString();
             const formattedLogLevelMock = cliColors.magentaBright(`[DEBUG]`);
@@ -107,7 +107,7 @@ describe('Logger', () => {
     });
 
     describe('verbose', () => {
-        it('should log an verbose log to the stdout the message, building correctly a log', async () => {
+        it('should log an verbose log to the stdout, building correctly a log', async () => {
             const PIDMessageMock = cliColors.cyanBright(`pid: [${process.pid}]`);
             const timestampMock = (new Date()).toLocaleString();
             const formattedLogLevelMock = cliColors.cyanBright(`[VERBOSE]`);
@@ -125,7 +125,7 @@ describe('Logger', () => {
     });
 
     describe('fatal', () => {
-        it('should log an fatal log to the stdout the message, building correctly a log', async () => {
+        it('should log an fatal log to the stdout, building correctly a log', async () => {
             const PIDMessageMock = cliColors.bold(`pid: [${process.pid}]`);
             const timestampMock = (new Date()).toLocaleString();
             const formattedLogLevelMock = cliColors.bold(`[FATAL]`);
