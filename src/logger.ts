@@ -1,9 +1,22 @@
+import { WriteStream, createWriteStream } from "fs";
 import { cliColors } from "./utils/cli-colors";
 
 export type LogLevel = 'log' | 'error' | 'warn' | 'debug' | 'verbose' | 'fatal';
 
+export type StdOut = WriteStream | string;
+
 export class Logger {
-    constructor(private readonly context?: string) {}
+    readonly stdout: WriteStream;
+    constructor(private readonly context?: string, stdout?: StdOut) {
+        if(stdout) {
+            if(typeof stdout == 'string') {
+                this.stdout = createWriteStream(stdout);
+            }
+            else {
+                this.stdout = stdout;
+            }
+        }
+    }
 
     private getColorByLogLevel(logLevel: LogLevel) {
         switch (logLevel) {
@@ -56,13 +69,24 @@ export class Logger {
     private printMessage(message: string, logLevel: LogLevel, writeStreamType?: 'stderr' | 'stdout') {
         const finalMessage = this.formatMessage(message, logLevel);
 
+        if(this.stdout) {
+            this.stdout.write(finalMessage);
+            return;
+        }
+
         process[writeStreamType || 'stdout'].write(finalMessage);
     }
 
     private printStack(stack: string) {
+        const formattedStack = `${stack}\n`;
         if(!stack) return;
 
-        process.stderr.write(`${stack}\n`);
+        if(this.stdout) {
+            this.stdout.write(formattedStack);
+            return;
+        }
+
+        process.stderr.write(formattedStack);
     }
 
     public log (message: string) {
