@@ -105,4 +105,40 @@ describe('Logger', () => {
             assert.ok(processStdoutWriteSpy.calledOnceWithExactly(formattedMessageMock));
         });
     });
+
+    describe('verbose', () => {
+        it('should log an verbose log to the stdout the message, building correctly a log', async () => {
+            const PIDMessageMock = cliColors.cyanBright(`pid: [${process.pid}]`);
+            const timestampMock = (new Date()).toLocaleString();
+            const formattedLogLevelMock = cliColors.cyanBright(`[VERBOSE]`);
+            const contextMessageMock = cliColors.yellow(`[${unitTestContextMock}]`);
+            const messageMock = `Some logging message`;
+
+            const formattedMessageMock = 
+                `${PIDMessageMock} - ${timestampMock} ${formattedLogLevelMock} ${contextMessageMock} ${cliColors.cyanBright(messageMock)}\n`;            
+            
+            const result = loggerInstance.verbose(messageMock);
+            
+            assert.deepStrictEqual(result, undefined);
+            assert.ok(processStdoutWriteSpy.calledOnceWithExactly(formattedMessageMock));
+        });
+    });
+
+    describe('fatal', () => {
+        it('should log an fatal log to the stdout the message, building correctly a log', async () => {
+            const PIDMessageMock = cliColors.bold(`pid: [${process.pid}]`);
+            const timestampMock = (new Date()).toLocaleString();
+            const formattedLogLevelMock = cliColors.bold(`[FATAL]`);
+            const contextMessageMock = cliColors.yellow(`[${unitTestContextMock}]`);
+            const messageMock = `Some logging message`;
+
+            const formattedMessageMock = 
+                `${PIDMessageMock} - ${timestampMock} ${formattedLogLevelMock} ${contextMessageMock} ${cliColors.bold(messageMock)}\n`;            
+            
+            const result = loggerInstance.fatal(messageMock);
+            
+            assert.deepStrictEqual(result, undefined);
+            assert.ok(processStdoutWriteSpy.calledOnceWithExactly(formattedMessageMock));
+        });
+    });
 })
