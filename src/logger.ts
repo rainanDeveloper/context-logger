@@ -62,7 +62,7 @@ export class Logger {
     private printStack(stack: string) {
         if(!stack) return;
 
-        process.stderr.write(`${stack}`);
+        process.stderr.write(`${stack}\n`);
     }
 
     public log (message: string) {

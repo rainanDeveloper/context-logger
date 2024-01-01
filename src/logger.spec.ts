@@ -72,6 +72,26 @@ describe('Logger', () => {
             assert.deepStrictEqual(result, undefined);
             assert.ok(processStdErrWriteSpy.calledOnceWithExactly(formattedMessageMock));
         });
+
+        it('should log an error to the stderr with the stack of the error, building correctly a log', async () => {
+            const PIDMessageMock = cliColors.red(`pid: [${process.pid}]`);
+            const timestampMock = (new Date()).toLocaleString();
+            const formattedLogLevelMock = cliColors.red(`[ERROR]`);
+            const contextMessageMock = cliColors.yellow(`[${unitTestContextMock}]`);
+            const messageMock = `Some logging message`;
+
+            const formattedMessageMock = 
+                `${PIDMessageMock} - ${timestampMock} ${formattedLogLevelMock} ${contextMessageMock} ${cliColors.red(messageMock)}\n`;            
+            
+            const errorMock = new Error('Some error occurred!');
+
+            const result = loggerInstance.error(messageMock, errorMock.stack);
+            
+            assert.deepStrictEqual(result, undefined);
+            assert.ok(processStdErrWriteSpy.calledTwice);
+            assert.ok(processStdErrWriteSpy.calledWithExactly(formattedMessageMock));
+            assert.ok(processStdErrWriteSpy.calledWithExactly(`${errorMock.stack}\n`));
+        });
     });
 
     describe('warn', () => {
