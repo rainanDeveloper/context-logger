@@ -3,7 +3,6 @@ import { Logger } from "./logger";
 import * as assert from 'node:assert';
 import * as sinon from "sinon";
 import { cliColors } from "./utils/cli-colors";
-import { error } from "node:console";
 
 describe('Logger', () => {
     const unitTestContextMock = 'Logger Unit Test';
