@@ -87,4 +87,22 @@ describe('Logger', () => {
             assert.ok(processStdoutWriteSpy.calledOnceWithExactly(formattedMessageMock));
         });
     });
+
+    describe('debug', () => {
+        it('should log an debug log to the stdout the message, building correctly a log', async () => {
+            const PIDMessageMock = cliColors.magentaBright(`pid: [${process.pid}]`);
+            const timestampMock = (new Date()).toLocaleString();
+            const formattedLogLevelMock = cliColors.magentaBright(`[DEBUG]`);
+            const contextMessageMock = cliColors.yellow(`[${unitTestContextMock}]`);
+            const messageMock = `Some logging message`;
+
+            const formattedMessageMock = 
+                `${PIDMessageMock} - ${timestampMock} ${formattedLogLevelMock} ${contextMessageMock} ${cliColors.magentaBright(messageMock)}\n`;            
+            
+            const result = loggerInstance.debug(messageMock);
+            
+            assert.deepStrictEqual(result, undefined);
+            assert.ok(processStdoutWriteSpy.calledOnceWithExactly(formattedMessageMock));
+        });
+    });
 })
