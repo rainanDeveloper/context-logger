@@ -59,12 +59,19 @@ export class Logger {
         process.stdout.write(finalMessage);
     }
 
+    private printStack(stack: string) {
+        if(!stack) return;
+
+        process.stderr.write(`${stack}`);
+    }
+
     public log (message: string) {
         this.printMessage(message, 'log');
     }
 
-    public error(message: string) {
+    public error(message: string, stack?: string) {
         this.printMessage(message, 'error');
+        this.printStack(stack);
     }
 
     public warn(message: string) {
