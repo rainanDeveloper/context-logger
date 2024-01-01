@@ -53,10 +53,10 @@ export class Logger {
         return new Date().toLocaleString(process.env.LOCALE || 'en-US');
     }
 
-    private printMessage(message: string, logLevel: LogLevel) {
+    private printMessage(message: string, logLevel: LogLevel, writeStreamType?: 'stderr' | 'stdout') {
         const finalMessage = this.formatMessage(message, logLevel);
 
-        process.stdout.write(finalMessage);
+        process[writeStreamType || 'stdout'].write(finalMessage);
     }
 
     private printStack(stack: string) {
@@ -70,7 +70,7 @@ export class Logger {
     }
 
     public error(message: string, stack?: string) {
-        this.printMessage(message, 'error');
+        this.printMessage(message, 'error', 'stderr');
         this.printStack(stack);
     }
 

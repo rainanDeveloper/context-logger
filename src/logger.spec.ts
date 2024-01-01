@@ -16,6 +16,8 @@ describe('Logger', () => {
     clock.restore();
     let processStdoutWriteSpy = sinon.spy(process.stdout, 'write');
     processStdoutWriteSpy.restore();
+    let processStdErrWriteSpy = sinon.spy(process.stderr, 'write');
+    processStdErrWriteSpy.restore();
 
     beforeEach(() => {
         clock = sinon.useFakeTimers({
@@ -23,10 +25,12 @@ describe('Logger', () => {
         });
 
         processStdoutWriteSpy = sinon.spy(process.stdout, 'write');
+        processStdErrWriteSpy = sinon.spy(process.stderr, 'write');
     });
     afterEach(() => {
         clock.restore();
         processStdoutWriteSpy.restore();
+        processStdErrWriteSpy.restore();
     })
 
     it('Logger instance should be defined and an instance of Logger', () => {
@@ -66,7 +70,7 @@ describe('Logger', () => {
             const result = loggerInstance.error(messageMock);
             
             assert.deepStrictEqual(result, undefined);
-            assert.ok(processStdoutWriteSpy.calledOnceWithExactly(formattedMessageMock));
+            assert.ok(processStdErrWriteSpy.calledOnceWithExactly(formattedMessageMock));
         });
     });
 
