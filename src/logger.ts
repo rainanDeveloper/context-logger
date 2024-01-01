@@ -46,7 +46,6 @@ export class Logger {
         const formattedLogLevel = this.formatLogLevel(logLevel);
         const contextMessage = this.formatContext();
         message = this.colorize(message, logLevel);
-        message = ` ${message}`;
         return `${PIDMessage} - ${timestamp} ${formattedLogLevel} ${contextMessage} ${message}\n`;
     }
 
